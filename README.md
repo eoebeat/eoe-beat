@@ -1,1 +1,1 @@
-# eoe-music
+# eoe-beat
