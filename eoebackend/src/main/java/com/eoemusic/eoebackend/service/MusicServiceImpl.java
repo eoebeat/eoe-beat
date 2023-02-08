@@ -58,7 +58,9 @@ public class MusicServiceImpl implements MusicService {
     return map;
   }
 
-  public QueryResult search(QueryRequest query) {
+  public QueryResult search(QueryRequest query) throws Exception {
     return musicDao.queryMusic(query);
   }
+  
+    
 }

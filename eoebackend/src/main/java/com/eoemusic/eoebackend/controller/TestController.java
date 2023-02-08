@@ -52,11 +52,6 @@ public class TestController {
   @Autowired
   private MusicService musicService;
 
-  @GetMapping("/testJdbctemplate")
-  public void testJdbctemplate() {
-    musicService.search(new QueryRequest());
-  }
-
   public static void main(String[] args) {
     System.out.println("米诺 柚恩".replaceAll("\\s+", ""));
     ;

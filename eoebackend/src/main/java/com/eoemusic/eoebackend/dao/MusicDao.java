@@ -4,10 +4,15 @@ import com.eoemusic.eoebackend.domain.MusicResponse;
 import com.eoemusic.eoebackend.domain.PageInfo;
 import com.eoemusic.eoebackend.domain.QueryRequest;
 import com.eoemusic.eoebackend.domain.QueryResult;
+import com.eoemusic.eoebackend.entity.Music;
+import com.eoemusic.eoebackend.entity.Playlist;
+import com.eoemusic.eoebackend.repository.MusicRepository;
+import com.eoemusic.eoebackend.repository.PlaylistRepository;
 import com.eoemusic.eoebackend.utils.MysqlPage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,10 +32,13 @@ public class MusicDao {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
+  @Autowired
+  private PlaylistRepository playlistRepository;
+
   @Value(value = "${alist.ipPort}")
   private String alistUrlPrefix;
 
-  public QueryResult queryMusic(QueryRequest query) {
+  public QueryResult queryMusic(QueryRequest query) throws Exception {
     Map<String, String> conditionMap = query.getConditionMap();
     List<String> pList = new ArrayList<>();
     StringBuilder sql = new StringBuilder(
@@ -40,7 +48,27 @@ public class MusicDao {
 
     if (!isEmpty(conditionMap.get("userInput"))) {
       sql.append(" and song_name like '%" + conditionMap.get("userInput") + "%'").
-          append(" or song_name_alias like '%" + conditionMap.get("userInput") + "%'");
+          append(" or song_name_alias like '%" + conditionMap.get("userInput") + "%'").
+          append(" or singer like '%" + conditionMap.get("userInput") + "%'").
+          append(" order by hit_count desc, song_date desc");
+    }
+    if (!isEmpty(conditionMap.get(("playlistId")))) {
+      Optional<Playlist> optionPlaylist = playlistRepository
+          .findById(Long.valueOf(conditionMap.get("playlistId")));
+      if (!optionPlaylist.isPresent()) {
+        throw new Exception("playlist does not exist...");
+      }
+      String musicId = optionPlaylist.get().getMusicIds();
+      String[] musicIdArr = musicId.split(",");
+      StringBuilder sb = new StringBuilder();
+      for (String pid : musicIdArr) {
+        sb.append("'").append(pid).append("'").append(",");
+      }
+      sb.deleteCharAt(sb.length() - 1);
+      sql.append(" and id in (").append(sb).append(")").append(" order by song_date desc");
+    }
+    if (conditionMap.size() == 0) {
+      sql.append(" order by song_date desc");
     }
     if (log.isDebugEnabled()) {
       log.info(sql.toString());

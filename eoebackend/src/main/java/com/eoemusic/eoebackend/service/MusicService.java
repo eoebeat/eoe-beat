@@ -16,5 +16,6 @@ public interface MusicService {
 
   Map<String, List<PlaylistResponse>> getPlaylistsByUserId(Long userId);
 
-  QueryResult search(QueryRequest query);
+  QueryResult search(QueryRequest query) throws Exception;
+
 }

@@ -42,7 +42,7 @@ public class MusicController {
   }
 
   @PostMapping("/search")
-  public QueryResult search(@RequestBody QueryRequest query) {
+  public QueryResult search(@RequestBody QueryRequest query) throws Exception {
     if (log.isDebugEnabled()) {
       String json = JSON.toJson(query);
       log.info("Music search, param: {}", json);
