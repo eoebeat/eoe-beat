@@ -11,7 +11,10 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
@@ -70,20 +73,23 @@ public class OpsController {
               .get(SyncCSVEnum.AUDIO_MEDIA_TYPE.getColumnNum())).toString());
       //TODO
       String coverMediaType = "jpg";
-      Music music = new Music(
-          csvDatum.get(SyncCSVEnum.ID.getColumnNum()).replaceAll("[^A-Za-z0-9]", ""),
-          Long.valueOf(csvDatum.get(SyncCSVEnum.UPDATE_TIME.getColumnNum())),
-          csvDatum.get(SyncCSVEnum.SONG_NAME.getColumnNum()),
-          csvDatum.get(SyncCSVEnum.SONG_NAME_ALIAS.getColumnNum()),
-          csvDatum.get(SyncCSVEnum.SINGER.getColumnNum()),
-          csvDatum.get(SyncCSVEnum.SONG_DATE.getColumnNum()),
-          csvDatum.get(SyncCSVEnum.VERSION_REMARK.getColumnNum()),
-          csvDatum.get(SyncCSVEnum.AUDIO_MEDIA_TYPE.getColumnNum()),
-          coverMediaType,
-          Integer.valueOf(csvDatum.get(SyncCSVEnum.DURATION.getColumnNum())),
-          csvDatum.get(SyncCSVEnum.SONG_LANGUAGE.getColumnNum()),
-          csvDatum.get(SyncCSVEnum.SONG_STATUS.getColumnNum()),
-          alistAudioPath, alistCoverPath, partialUrl, 0);
+      Music music = new Music();
+      music.setId(csvDatum.get(SyncCSVEnum.ID.getColumnNum()).replaceAll("[^A-Za-z0-9]", ""));
+      music.setUpdateTime(Long.valueOf(csvDatum.get(SyncCSVEnum.UPDATE_TIME.getColumnNum())));
+      music.setSongName(csvDatum.get(SyncCSVEnum.SONG_NAME.getColumnNum()));
+      music.setSongNameAlias(csvDatum.get(SyncCSVEnum.SONG_NAME_ALIAS.getColumnNum()));
+      music.setSinger(csvDatum.get(SyncCSVEnum.SINGER.getColumnNum()));
+      music.setSongDate(csvDatum.get(SyncCSVEnum.SONG_DATE.getColumnNum()));
+      music.setVersionRemark(csvDatum.get(SyncCSVEnum.VERSION_REMARK.getColumnNum()));
+      music.setAudioMediaType(csvDatum.get(SyncCSVEnum.AUDIO_MEDIA_TYPE.getColumnNum()));
+      music.setCoverMediaType(coverMediaType);
+      music.setDuration(Integer.valueOf(csvDatum.get(SyncCSVEnum.DURATION.getColumnNum())));
+      music.setSongLanguage(csvDatum.get(SyncCSVEnum.SONG_LANGUAGE.getColumnNum()));
+      music.setSongStatus(csvDatum.get(SyncCSVEnum.SONG_STATUS.getColumnNum()));
+      music.setAlistAudioPath(alistAudioPath);
+      music.setAlistCoverPath(alistCoverPath);
+      music.setPartialUrl(partialUrl);
+      music.setHitCount(0);
       musicList.add(music);
     }
     musicRepository.saveAll(musicList);

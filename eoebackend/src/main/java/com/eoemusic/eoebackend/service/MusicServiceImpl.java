@@ -6,6 +6,7 @@ import com.eoemusic.eoebackend.domain.QueryRequest;
 import com.eoemusic.eoebackend.domain.QueryResult;
 import com.eoemusic.eoebackend.entity.Playlist;
 import com.eoemusic.eoebackend.entity.User;
+import com.eoemusic.eoebackend.repository.MusicRepository;
 import com.eoemusic.eoebackend.repository.PlaylistRepository;
 import com.eoemusic.eoebackend.repository.UserRepository;
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ public class MusicServiceImpl implements MusicService {
   @Autowired
   private PlaylistRepository playlistRepository;
 
+ 
+  
   @Autowired
   private MusicDao musicDao;
 
@@ -61,6 +64,7 @@ public class MusicServiceImpl implements MusicService {
   public QueryResult search(QueryRequest query) throws Exception {
     return musicDao.queryMusic(query);
   }
+  
   
     
 }

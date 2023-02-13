@@ -6,10 +6,16 @@ import com.eoemusic.eoebackend.domain.QueryRequest;
 import com.eoemusic.eoebackend.domain.QueryResult;
 import com.eoemusic.eoebackend.entity.Music;
 import com.eoemusic.eoebackend.entity.Playlist;
+import com.eoemusic.eoebackend.enums.SearchOrderByEnum;
 import com.eoemusic.eoebackend.repository.MusicRepository;
 import com.eoemusic.eoebackend.repository.PlaylistRepository;
+import com.eoemusic.eoebackend.utils.DateUtil;
 import com.eoemusic.eoebackend.utils.MysqlPage;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,19 +44,19 @@ public class MusicDao {
   @Value(value = "${alist.ipPort}")
   private String alistUrlPrefix;
 
+
   public QueryResult queryMusic(QueryRequest query) throws Exception {
     Map<String, String> conditionMap = query.getConditionMap();
     List<String> pList = new ArrayList<>();
     StringBuilder sql = new StringBuilder(
         "select id, song_date, singer, song_name, song_name_alias, version_remark, Alist_audio_path,"
             + " Alist_cover_path, partial_url, audio_media_type, cover_media_type, duration, "
-            + "song_language, song_status, hit_count from music where 1 = 1 ");
+            + "song_language, song_status, hit_count, insert_time from music where 1 = 1 ");
 
     if (!isEmpty(conditionMap.get("userInput"))) {
       sql.append(" and song_name like '%" + conditionMap.get("userInput") + "%'").
           append(" or song_name_alias like '%" + conditionMap.get("userInput") + "%'").
-          append(" or singer like '%" + conditionMap.get("userInput") + "%'").
-          append(" order by hit_count desc, song_date desc");
+          append(" or singer like '%" + conditionMap.get("userInput") + "%'");
     }
     if (!isEmpty(conditionMap.get(("playlistId")))) {
       Optional<Playlist> optionPlaylist = playlistRepository
@@ -65,10 +71,16 @@ public class MusicDao {
         sb.append("'").append(pid).append("'").append(",");
       }
       sb.deleteCharAt(sb.length() - 1);
-      sql.append(" and id in (").append(sb).append(")").append(" order by song_date desc");
+      sql.append(" and id in (").append(sb).append(")");
     }
-    if (conditionMap.size() == 0) {
-      sql.append(" order by song_date desc");
+    if (!isEmpty(conditionMap.get("monthlySelection"))) {
+      int[] yearMonth = DateUtil.parseYearMonth(conditionMap.get("monthlySelection"));
+      sql.append(" and year(song_date) = " + yearMonth[0])
+          .append(" and month(song_date) =" + yearMonth[1]);
+    }
+
+    if (!isEmpty(conditionMap.get(("order")))) {
+      sql.append(SearchOrderByEnum.values()[Integer.valueOf(conditionMap.get("order"))].getSQL());
     }
     if (log.isDebugEnabled()) {
       log.info(sql.toString());
@@ -99,13 +111,16 @@ public class MusicDao {
       res.setSongStatus(
           data.get("song_status") == null ? "" : String.valueOf(data.get("song_status")));
       res.setHitCount(Integer.valueOf(String.valueOf(data.get("hit_count"))));
+      res.setInsertTime(DateUtil.transformDetailTime((Timestamp) data.get("insert_time")));
       resList.add(res);
     });
+    DateUtil.clear();
     return new QueryResult(resList, pageable);
   }
 
   public boolean isEmpty(String str) {
     return str == null || str.length() == 0;
   }
+
 
 }

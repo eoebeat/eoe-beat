@@ -1,15 +1,18 @@
 package com.eoemusic.eoebackend;
 
+import com.eoemusic.eoebackend.config.HitCounter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
@@ -35,6 +38,12 @@ public class EoebackendApplication extends SpringBootServletInitializer {
   @Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
     return builder.sources(EoebackendApplication.class);
+  }
+  @Autowired
+  private HitCounter hitCounter;
+  @PostConstruct
+  public void startHitCounter() {
+    hitCounter.start();
   }
 //
 //  @PostConstruct

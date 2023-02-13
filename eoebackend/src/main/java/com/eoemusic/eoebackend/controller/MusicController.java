@@ -1,15 +1,20 @@
 package com.eoemusic.eoebackend.controller;
 
+import apple.laf.JRSUIConstants.Hit;
+import com.eoemusic.eoebackend.config.HitCounter;
+import com.eoemusic.eoebackend.dao.MusicDao;
 import com.eoemusic.eoebackend.domain.PlaylistResponse;
 import com.eoemusic.eoebackend.domain.QueryRequest;
 import com.eoemusic.eoebackend.domain.QueryResult;
 import com.eoemusic.eoebackend.entity.User;
+import com.eoemusic.eoebackend.repository.MusicRepository;
 import com.eoemusic.eoebackend.repository.UserRepository;
 import com.eoemusic.eoebackend.service.MusicService;
 import com.eoemusic.eoebackend.utils.JSON;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +53,17 @@ public class MusicController {
       log.info("Music search, param: {}", json);
     }
     return musicService.search(query);
+  }
+
+  @Autowired
+  public MusicRepository musicRepository;
+
+  @Autowired
+  public MusicDao musicDao;
+
+  @GetMapping("/hit/{musicId}")
+  public void hit(@PathVariable("musicId") String musicId) {
+    HitCounter.addHit(musicId);
   }
 
 }
