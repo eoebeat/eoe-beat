@@ -1,5 +1,6 @@
 package com.eoemusic.eoebackend.dao;
 
+import com.eoemusic.eoebackend.config.AppConfig;
 import com.eoemusic.eoebackend.domain.MusicResponse;
 import com.eoemusic.eoebackend.domain.PageInfo;
 import com.eoemusic.eoebackend.domain.QueryRequest;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -41,9 +43,11 @@ public class MusicDao {
   @Autowired
   private PlaylistRepository playlistRepository;
 
-  @Value(value = "${alist.ipPort}")
-  private String alistUrlPrefix;
+  @Autowired
+  private Environment env;
 
+  @Autowired
+  private AppConfig appConfig;
 
   public QueryResult queryMusic(QueryRequest query) throws Exception {
     Map<String, String> conditionMap = query.getConditionMap();
@@ -85,6 +89,8 @@ public class MusicDao {
     if (log.isDebugEnabled()) {
       log.info(sql.toString());
     }
+    String region = env.getProperty("alist.region." + conditionMap.get("region"));
+    String alistUrlPrefix = appConfig.getIpPort() + "/d" + region;
     PageInfo pageable = query.getPageable();
     int currentPage = Integer.valueOf(pageable.getPage());
     int numPerPage = Integer.valueOf(pageable.getSize());
@@ -102,9 +108,9 @@ public class MusicDao {
       res.setSongNameAlias(
           data.get("song_name_alias") == null ? "" : String.valueOf(data.get("song_name_alias")));
       res.setVersionRemark(String.valueOf(data.get("version_remark")));
-      res.setAudioUrl(new StringBuilder(alistUrlPrefix).append((data.get("Alist_audio_path")))
+      res.setAudioUrl(new StringBuilder(alistUrlPrefix).append(data.get("Alist_audio_path"))
           .append(data.get("partial_url")).toString());
-      res.setCoverUrl(new StringBuilder(alistUrlPrefix).append((data.get("Alist_cover_path")))
+      res.setCoverUrl(new StringBuilder(alistUrlPrefix).append(data.get("Alist_cover_path"))
           .append(data.get("partial_url")).toString());
       res.setDuration(Integer.valueOf(String.valueOf(data.get("duration"))));
       res.setSongLanguage(String.valueOf(data.get("song_language")));
