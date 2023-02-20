@@ -4,7 +4,7 @@ import { SafeAreaView, initialWindowMetrics } from 'react-native-safe-area-conte
 import { Colors, DEVICE_LOGIC_HEIGHT, HEIGHT_RATIO, WIDTH_RATIO } from '../../styles/Styles'
 import { Icon } from '@rneui/themed'
 import { useSelector } from 'react-redux'
-import { selectCurrentQueue } from './playerSlice'
+import { selectCurrentQueue } from '../../store/slices/playerSlice'
 import QueueItem, { QUEUEITEM_HEIGHT } from '../common/QueueItem'
 import Separator from '../common/Separator'
 

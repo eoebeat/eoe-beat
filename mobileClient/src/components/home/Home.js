@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { Colors, HEIGHT_RATIO, WIDTH_RATIO } from '../../styles/Styles'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useSelector, useDispatch } from 'react-redux'
-import { setBottomPosition, selectCurrentTrack } from '../player/playerSlice'
+import { setBottomPosition, selectCurrentTrack } from '../../store/slices/playerSlice'
 import { getGreeting, searchMusicResultConvert } from '../../utils/shared'
 import PlaylistCard from './PlaylistCard'
 import MusicService from '../../services/music.service'
 import MusicItem from '../common/MusicItem'
 import Separator from '../common/Separator'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Button } from '@rneui/themed'
 
 const Home = () => {
   const tabBarHeight = useBottomTabBarHeight()
@@ -74,9 +76,18 @@ const Home = () => {
     }
   }
 
+  const clear = async () => {
+    try {
+      await AsyncStorage.clear()
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const listHeaderComponent = (
-    <View style={styles.container}>
+    <View style={styles.listHeaderContainer}>
       <Text style={styles.greetingText}>{greeting}</Text>
+      <Button onPress={clear} title="clear async storage" />
       <View style={styles.playlistCardsWrapper}>
         <View style={styles.playlistCardsSubWrapper}>
           <PlaylistCard title={'已收藏的歌曲'} />
@@ -115,6 +126,10 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: Colors.white1,
+    paddingHorizontal: 20 * HEIGHT_RATIO
+  },
+  listHeaderContainer: {
     flex: 1,
     backgroundColor: Colors.white1,
     display: 'flex',

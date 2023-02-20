@@ -1,12 +1,13 @@
 import React from 'react'
-import { StatusBar, StyleSheet, useColorScheme, Platform, Text } from 'react-native'
+import { StatusBar, useColorScheme, Platform, Text } from 'react-native'
 import { Provider } from 'react-redux'
 import Main from './src/components/Main'
-import { store } from './src/store/store'
+import { store, persistor } from './src/store/store'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { NavigationContainer } from '@react-navigation/native'
 import { registerCustomIconType } from '@rneui/base'
 import MyIcon from './src/components/CustomIcon'
+import { PersistGate } from 'redux-persist/integration/react'
 
 // 全局设置安卓字体来解决文字显示不全
 const defaultFontFamily = {
@@ -28,21 +29,21 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <StatusBar
-          hidden={false}
-          translucent={true}
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor="transparent"
-        />
-        <SafeAreaProvider>
-          <Main />
-        </SafeAreaProvider>
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <StatusBar
+            hidden={false}
+            translucent={true}
+            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            backgroundColor="transparent"
+          />
+          <SafeAreaProvider>
+            <Main />
+          </SafeAreaProvider>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   )
 }
-
-const styles = StyleSheet.create({})
 
 export default App

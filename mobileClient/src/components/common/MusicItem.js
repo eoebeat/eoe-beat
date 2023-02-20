@@ -2,7 +2,7 @@ import { View, Text, Pressable, StyleSheet, Image } from 'react-native'
 import React, { useMemo, memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Colors, DEVICE_LOGIC_WIDTH, WIDTH_RATIO } from '../../styles/Styles'
-import { selectCurrentTrack, setCurrentTrack } from '../player/playerSlice'
+import { selectCurrentTrack, setCurrentTrack } from '../../store/slices/playerSlice'
 
 export const MUSICITEM_HEIGHT = 60 * WIDTH_RATIO
 

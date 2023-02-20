@@ -7,7 +7,7 @@ import {
   setFinishedSetup,
   selectBottomPosition,
   setTrackRepeatMode
-} from './player/playerSlice'
+} from '../store/slices/playerSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import TrackPlayer, { RepeatMode } from 'react-native-track-player'
 import { Colors, DEVICE_LOGIC_HEIGHT } from '../styles/Styles'
@@ -19,6 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import LinearGradient from 'react-native-linear-gradient'
 import { Icon } from '@rneui/themed'
 import { TrackRepeatMode } from '../constants/Player'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Main = () => {
   const finishedSetup = useSelector(selectFinishedSetup)
@@ -28,6 +29,8 @@ const Main = () => {
 
   useEffect(() => {
     const setupTrackplayer = async () => {
+      const allKeys = await AsyncStorage.getAllKeys()
+      console.log(allKeys)
       try {
         if (!finishedSetup) {
           await TrackPlayer.setupPlayer({ maxBuffer: 150 })

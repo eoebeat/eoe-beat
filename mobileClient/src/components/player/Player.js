@@ -11,7 +11,7 @@ import {
   setCurrentQueue,
   setCurrentTrack,
   setOriginalQueue
-} from './playerSlice'
+} from '../../store/slices/playerSlice'
 import PlayerModal from './PlayerModal'
 
 const track1 = {

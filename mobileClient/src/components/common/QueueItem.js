@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React, { useMemo } from 'react'
 import { WIDTH_RATIO, DEVICE_LOGIC_WIDTH, Colors } from '../../styles/Styles'
 import { useSelector } from 'react-redux'
-import { selectCurrentTrack } from '../player/playerSlice'
+import { selectCurrentTrack } from '../../store/slices/playerSlice'
 import TrackPlayer from 'react-native-track-player'
 
 export const QUEUEITEM_HEIGHT = 60 * WIDTH_RATIO

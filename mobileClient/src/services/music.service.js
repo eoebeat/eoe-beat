@@ -14,10 +14,23 @@ const MusicService = {
   },
   /**
    * users search music
-   * @param {string[]} data
+   * @param {string} value
    * @param {object} pageable { page: number, size: number }
    */
-  async searchMusic(data, pageable) {},
+  async searchMusic(value, pageable) {
+    const url = `${EOEBEAT_HOST}/music/search`
+    const params = {
+      condition: [
+        {
+          name: 'userInput',
+          value
+        }
+      ],
+      pageable
+    }
+    const res = await Request.post(url, params)
+    return res.data
+  },
   /**
    * Get all songs from a playlist
    * @param {string} playlistId

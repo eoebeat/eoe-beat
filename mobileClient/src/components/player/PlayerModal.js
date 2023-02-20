@@ -24,7 +24,7 @@ import {
   setOriginalQueue,
   setTrackRepeatMode,
   selectOriginalQueue
-} from './playerSlice'
+} from '../../store/slices/playerSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { BlurView } from '@react-native-community/blur'
 import { Icon, Slider } from '@rneui/themed'
@@ -230,7 +230,10 @@ const PlayerModal = (props) => {
             <Image source={coverImageSource} style={styles.coverImage} />
           </View>
           <View
-            style={[styles.bottomHalfWrapper, { marginBottom: initialWindowMetrics.insets.bottom }]}
+            style={[
+              styles.bottomHalfWrapper,
+              { marginBottom: initialWindowMetrics.insets.bottom + 10 * HEIGHT_RATIO }
+            ]}
           >
             <View style={styles.infoWrapper}>
               <View>
@@ -382,8 +385,9 @@ const PlayerModal = (props) => {
               >
                 <Icon
                   type="ionicon"
-                  name="list"
+                  name="list-outline"
                   size={28 * WIDTH_RATIO}
+                  color={Colors.black1}
                   style={styles.controllerIcon}
                 />
               </Pressable>
@@ -472,7 +476,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: -4
+    marginTop: -10 * HEIGHT_RATIO
   },
   timePosition: {
     color: Colors.black1,
@@ -489,7 +493,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 14 * HEIGHT_RATIO
   },
   controllerIcon: {
     opacity: 0.7

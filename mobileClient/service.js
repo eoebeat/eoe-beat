@@ -1,6 +1,6 @@
 // service.js
 import TrackPlayer, { Event, RepeatMode } from 'react-native-track-player'
-import { setCurrentTrack } from './src/components/player/playerSlice'
+import { setCurrentTrack } from './src/store/slices/playerSlice'
 import { store } from './src/store/store'
 
 module.exports = async function () {

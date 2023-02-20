@@ -9,7 +9,8 @@ export const Colors = {
   grey2: '#7b7b7b',
   lightgrey1: '#f4f4f4',
   lightgrey2: '#e7e7e7',
-  grey1Trans: 'rgba(92, 91, 91, 0.36)'
+  grey1Trans: 'rgba(92, 91, 91, 0.36)',
+  blue1: '#017afe'
 }
 
 // 设备逻辑宽高
