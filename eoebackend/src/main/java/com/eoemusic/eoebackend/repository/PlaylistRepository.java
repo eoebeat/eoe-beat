@@ -1,6 +1,5 @@
 package com.eoemusic.eoebackend.repository;
 
-import com.eoemusic.eoebackend.entity.Music;
 import com.eoemusic.eoebackend.entity.Playlist;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
