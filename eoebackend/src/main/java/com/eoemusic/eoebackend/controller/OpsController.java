@@ -84,6 +84,7 @@ public class OpsController {
       music.setAlistAudioPath(alistAudioPath);
       music.setAlistCoverPath(alistCoverPath);
       music.setPartialUrl(partialUrl);
+      music.setHitCount(musicDB == null ? 0 : musicDB.getHitCount());
       musicList.add(music);
     }
     musicRepository.saveAll(musicList);
@@ -103,6 +104,13 @@ public class OpsController {
 
   private String encodeValue(String value) {
     return UriUtils.encodePath(value, "UTF-8");
+  }
+
+  public static void main(String[] args) {
+    System.out.println(UriUtils.encodePath("/2022.07.24 米诺莞儿露早 心灵之蛋.m4a", "UTF-8"));
+//    System.out.println(UriUtils.decode(
+//        "/2022.07.24%20%E8%8E%9E%E5%84%BF%E9%9C%B2%E6%97%A9%E7%B1%B3%E8%AF%BA%20%E5%BF%83%E7%81%B5%E4%B9%8B%E8%9B%8B.m4a",
+//        "UTF-8"));
   }
 
 }
