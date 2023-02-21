@@ -103,9 +103,11 @@ public class MusicDao {
           data.get("song_name_alias") == null ? "" : String.valueOf(data.get("song_name_alias")));
       res.setVersionRemark(String.valueOf(data.get("version_remark")));
       res.setAudioUrl(new StringBuilder(alistUrlPrefix).append(data.get("Alist_audio_path"))
-          .append(data.get("partial_url")).toString());
+          .append(data.get("partial_url")).append(".").append(data.get("audio_media_type"))
+          .toString());
       res.setCoverUrl(new StringBuilder(alistUrlPrefix).append(data.get("Alist_cover_path"))
-          .append(data.get("partial_url")).toString());
+          .append(data.get("partial_url")).append(".").append(data.get("cover_media_type"))
+          .toString());
       res.setDuration(Integer.valueOf(String.valueOf(data.get("duration"))));
       res.setSongLanguage(String.valueOf(data.get("song_language")));
       res.setSongStatus(
