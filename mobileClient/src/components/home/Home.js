@@ -11,7 +11,7 @@ import MusicItem from '../common/MusicItem'
 import Separator from '../common/Separator'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button } from '@rneui/themed'
-import { CollectionType } from '../../constants/Other'
+import { CollectionType, SearchOrder } from '../../constants/Other'
 
 const Home = ({ navigation }) => {
   const tabBarHeight = useBottomTabBarHeight()
@@ -48,7 +48,10 @@ const Home = ({ navigation }) => {
   const getFirstPageMusic = async () => {
     try {
       setMusicListLoading(true)
-      const res = await MusicService.searchAllMusic({ page: 0, size: PAGE_SIZE })
+      const res = await MusicService.searchAllMusic(
+        { page: 0, size: PAGE_SIZE },
+        SearchOrder.DateNewToOld
+      )
       const convertedMusic = searchMusicResultConvert(res.items)
       setPage(res.pageable.page)
       setTotalNumMusic(res.pageable.total)
@@ -66,7 +69,10 @@ const Home = ({ navigation }) => {
     try {
       if ((page + 1) * PAGE_SIZE >= totalNumMusic) return
       setMusicListLoading(true)
-      const res = await MusicService.searchAllMusic({ page: page + 1, size: PAGE_SIZE })
+      const res = await MusicService.searchAllMusic(
+        { page: page + 1, size: PAGE_SIZE },
+        SearchOrder.DateNewToOld
+      )
       const convertedMusic = searchMusicResultConvert(res.items)
       setPage(res.pageable.page)
       setTotalNumMusic(res.pageable.total)

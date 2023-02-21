@@ -13,6 +13,7 @@ import { setSearchHistory, selectSearchHistory } from '../../store/slices/search
 import HistoryItem from './HistoryItem'
 import DeleteOverlay from './DeleteOverlay'
 import Footer from '../common/Footer'
+import { SearchOrder } from '../../constants/Other'
 
 const NUM_HISTORYITEM = 10
 
@@ -38,10 +39,15 @@ const Search = () => {
     return searchHistory.length !== 0
   }, [searchHistory])
 
+  // 搜索页的搜索全部按照 Hitcount 排序
   const handleSubmit = async (value) => {
     if (!value) return
     try {
-      const res = await MusicService.searchMusic(value, { page: 0, size: PAGE_SIZE })
+      const res = await MusicService.searchMusic(
+        value,
+        { page: 0, size: PAGE_SIZE },
+        SearchOrder.Hitcount
+      )
 
       const valueIdx = searchHistory.findIndex((element) => element === value)
       const tempArray = [...searchHistory]
@@ -75,10 +81,14 @@ const Search = () => {
     if ((page + 1) * PAGE_SIZE >= totalNumMusic) return
     try {
       setMusicListLoading(true)
-      const res = await MusicService.searchMusic(searchValue, {
-        page: page + 1,
-        size: PAGE_SIZE
-      })
+      const res = await MusicService.searchMusic(
+        searchValue,
+        {
+          page: page + 1,
+          size: PAGE_SIZE
+        },
+        SearchOrder.Hitcount
+      )
       const convertedMusic = searchMusicResultConvert(res.items)
       setPage(res.pageable.page)
       setTotalNumMusic(res.pageable.total)
@@ -97,7 +107,11 @@ const Search = () => {
   const handleHistoryItemPress = async (value) => {
     setSearchValue(value)
     try {
-      const res = await MusicService.searchMusic(value, { page: 0, size: PAGE_SIZE })
+      const res = await MusicService.searchMusic(
+        value,
+        { page: 0, size: PAGE_SIZE },
+        SearchOrder.Hitcount
+      )
 
       const valueIdx = searchHistory.findIndex((element) => element === value)
       const tempArray = [...searchHistory]
@@ -179,11 +193,14 @@ const Search = () => {
         </View>
       </View>
       {showNoResultText && (
-        <View style={styles.noResultWrapper}>
-          <Text style={styles.noResultText}>无结果</Text>
-          <Text style={styles.noResultSubText}>请尝试新搜索词。</Text>
-          <Footer />
-        </View>
+        <>
+          {SearchHistoryModule()}
+          <View style={styles.noResultWrapper}>
+            <Text style={styles.noResultText}>无结果</Text>
+            <Text style={styles.noResultSubText}>请尝试新搜索词。</Text>
+            <Footer />
+          </View>
+        </>
       )}
       {!showNoResultText && (
         <FlatList

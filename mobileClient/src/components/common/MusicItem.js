@@ -14,7 +14,7 @@ const MusicItem = (props) => {
 
   const coverImageUri = () => {
     // 有封面时
-    // if (track.artwork) return track.artwork
+    if (track.artwork) return track.artwork
 
     // 当前track没有封面
     // 多成员显示EOE
