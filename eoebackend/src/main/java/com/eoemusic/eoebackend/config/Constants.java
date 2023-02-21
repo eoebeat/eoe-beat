@@ -3,7 +3,6 @@ package com.eoemusic.eoebackend.config;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Data;
-import lombok.Getter;
 
 /**
  * @description: some desc

@@ -5,28 +5,20 @@ import com.eoemusic.eoebackend.dao.MusicDao;
 import com.eoemusic.eoebackend.domain.PlaylistResponse;
 import com.eoemusic.eoebackend.domain.QueryRequest;
 import com.eoemusic.eoebackend.domain.QueryResult;
-import com.eoemusic.eoebackend.entity.User;
 import com.eoemusic.eoebackend.repository.MusicRepository;
-import com.eoemusic.eoebackend.repository.UserRepository;
 import com.eoemusic.eoebackend.service.MusicService;
 import com.eoemusic.eoebackend.utils.JSON;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @description: some desc

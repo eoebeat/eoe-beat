@@ -6,7 +6,6 @@ import com.eoemusic.eoebackend.domain.QueryRequest;
 import com.eoemusic.eoebackend.domain.QueryResult;
 import com.eoemusic.eoebackend.entity.Playlist;
 import com.eoemusic.eoebackend.entity.User;
-import com.eoemusic.eoebackend.repository.MusicRepository;
 import com.eoemusic.eoebackend.repository.PlaylistRepository;
 import com.eoemusic.eoebackend.repository.UserRepository;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.asm.Advice.Unused;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
