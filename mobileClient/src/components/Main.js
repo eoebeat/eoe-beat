@@ -20,11 +20,35 @@ import LinearGradient from 'react-native-linear-gradient'
 import { Icon } from '@rneui/themed'
 import { TrackRepeatMode } from '../constants/Player'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import Collection from './collection/Collection'
+
+const Tab = createBottomTabNavigator()
+const Stack = createNativeStackNavigator()
+
+const HomeStack = () => (
+  <Stack.Navigator initialRouteName="Home">
+    <Stack.Screen
+      name="Home"
+      component={Home}
+      options={{
+        headerShown: false
+      }}
+    />
+    <Stack.Screen
+      name="Collection"
+      component={Collection}
+      options={{
+        headerShown: false
+      }}
+    />
+  </Stack.Navigator>
+)
 
 const Main = () => {
   const finishedSetup = useSelector(selectFinishedSetup)
   const dispatch = useDispatch()
-  const Tab = createBottomTabNavigator()
+
   const playerBottomPosition = useSelector(selectBottomPosition)
 
   useEffect(() => {
@@ -96,7 +120,7 @@ const Main = () => {
               tabBarInactiveTintColor: Colors.grey1
             })}
           >
-            <Tab.Screen name="主页" component={Home} />
+            <Tab.Screen name="主页" component={HomeStack} />
             <Tab.Screen name="搜索" component={Search} />
             <Tab.Screen name="库" component={Library} />
           </Tab.Navigator>

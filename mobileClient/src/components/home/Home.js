@@ -11,8 +11,9 @@ import MusicItem from '../common/MusicItem'
 import Separator from '../common/Separator'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button } from '@rneui/themed'
+import { CollectionType } from '../../constants/Other'
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const tabBarHeight = useBottomTabBarHeight()
   const dispatch = useDispatch()
   const [greeting, setGreeting] = useState('')
@@ -91,7 +92,13 @@ const Home = () => {
       <View style={styles.playlistCardsWrapper}>
         <View style={styles.playlistCardsSubWrapper}>
           <PlaylistCard title={'已收藏的歌曲'} />
-          <PlaylistCard title={'莞儿合集'} cardImage={require('../../../assets/cover/莞儿.jpg')} />
+          <PlaylistCard
+            title={'莞儿合集'}
+            cardImage={require('../../../assets/cover/莞儿.jpg')}
+            onPress={() =>
+              navigation.navigate('Collection', { type: CollectionType.Singer, singer: '莞儿' })
+            }
+          />
         </View>
         <View style={[styles.playlistCardsSubWrapper, { marginTop: 6 }]}>
           <PlaylistCard title={'露早合集'} cardImage={require('../../../assets/cover/露早.jpg')} />
