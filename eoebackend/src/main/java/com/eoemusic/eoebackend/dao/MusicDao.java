@@ -96,7 +96,7 @@ public class MusicDao {
     list.forEach(data -> {
       MusicResponse res = new MusicResponse();
       res.setId(String.valueOf(data.get("id")));
-      res.setSongDate(String.valueOf(data.get("song_date")));
+      res.setSongDate(DateUtil.parseDateDashToDot(String.valueOf(data.get("song_date"))));
       res.setSinger(String.valueOf(data.get("singer")));
       res.setSongName(String.valueOf(data.get("song_name")));
       res.setSongNameAlias(

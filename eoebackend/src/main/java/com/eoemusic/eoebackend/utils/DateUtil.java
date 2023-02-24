@@ -20,12 +20,25 @@ public class DateUtil {
 
   private static final ThreadLocal<DateFormat> threadlocalDetailFormat = ThreadLocal
       .withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
-
+  private static final ThreadLocal<DateFormat> threadlocalDateDashFormat = ThreadLocal
+      .withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+  private static final ThreadLocal<DateFormat> threadlocalDateDotFormat = ThreadLocal
+      .withInitial(() -> new SimpleDateFormat("yyyy.MM.dd"));
   private static final ThreadLocal<DateFormat> threadlocalMonthFormat = ThreadLocal
       .withInitial(() -> new SimpleDateFormat("yyyy.MM"));
 
   public static String transformDetailTime(Date resourceDate) {
     return threadlocalDetailFormat.get().format(resourceDate);
+  }
+
+  public static String parseDateDashToDot(String resourceDateDash)  {
+    Date dateDash = null;
+    try {
+      dateDash = threadlocalDateDashFormat.get().parse(resourceDateDash);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return threadlocalDateDotFormat.get().format(dateDash);
   }
 
   public static int[] parseYearMonth(String resourceYearMonth) {
@@ -44,6 +57,8 @@ public class DateUtil {
 
   public static void clear() {
     threadlocalDetailFormat.remove();
+    threadlocalDateDashFormat.remove();
+    threadlocalDateDotFormat.remove();
     threadlocalMonthFormat.remove();
   }
 }
