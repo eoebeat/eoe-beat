@@ -11,6 +11,8 @@ import com.eoemusic.eoebackend.repository.PlaylistRepository;
 import com.eoemusic.eoebackend.utils.DateUtil;
 import com.eoemusic.eoebackend.utils.MysqlPage;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +98,7 @@ public class MusicDao {
     list.forEach(data -> {
       MusicResponse res = new MusicResponse();
       res.setId(String.valueOf(data.get("id")));
-      res.setSongDate(String.valueOf(data.get("song_date")));
+      res.setSongDate(DateUtil.parseDateDashToDot(String.valueOf(data.get("song_date"))));
       res.setSinger(String.valueOf(data.get("singer")));
       res.setSongName(String.valueOf(data.get("song_name")));
       res.setSongNameAlias(
