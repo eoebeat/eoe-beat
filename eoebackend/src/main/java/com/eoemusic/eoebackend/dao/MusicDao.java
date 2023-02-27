@@ -83,8 +83,8 @@ public class MusicDao {
     if (log.isDebugEnabled()) {
       log.info(sql.toString());
     }
-    String region = env.getProperty("alist.region." + conditionMap.get("region"));
-    String alistUrlPrefix = appConfig.getIpPort() + "/d" + region;
+    String alistUrlPrefix = appConfig.getIpPort() + "/d" + env
+        .getProperty("alist.region." + conditionMap.get("region"));
     PageInfo pageable = query.getPageable();
     int currentPage = Integer.valueOf(pageable.getPage());
     int numPerPage = Integer.valueOf(pageable.getSize());

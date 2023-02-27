@@ -18,4 +18,5 @@ public interface MusicService {
 
   QueryResult search(QueryRequest query) throws Exception;
 
+  Map<String, String> getPathByName(String name, String region);
 }

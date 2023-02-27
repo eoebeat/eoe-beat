@@ -1,11 +1,14 @@
 package com.eoemusic.eoebackend.service;
 
+import com.eoemusic.eoebackend.config.AppConfig;
 import com.eoemusic.eoebackend.dao.MusicDao;
 import com.eoemusic.eoebackend.domain.PlaylistResponse;
 import com.eoemusic.eoebackend.domain.QueryRequest;
 import com.eoemusic.eoebackend.domain.QueryResult;
+import com.eoemusic.eoebackend.entity.AssetConfig;
 import com.eoemusic.eoebackend.entity.Playlist;
 import com.eoemusic.eoebackend.entity.User;
+import com.eoemusic.eoebackend.repository.AssetConfigRepository;
 import com.eoemusic.eoebackend.repository.PlaylistRepository;
 import com.eoemusic.eoebackend.repository.UserRepository;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,10 +39,17 @@ public class MusicServiceImpl implements MusicService {
   @Autowired
   private PlaylistRepository playlistRepository;
 
- 
-  
+  @Autowired
+  private AssetConfigRepository assetConfigRepository;
+
   @Autowired
   private MusicDao musicDao;
+
+  @Autowired
+  private AppConfig appConfig;
+
+  @Autowired
+  private Environment env;
 
   public Map<String, List<PlaylistResponse>> getPlaylistsByUserId(Long userId) {
     Map<String, List<PlaylistResponse>> map = new HashMap<>();
@@ -62,7 +73,15 @@ public class MusicServiceImpl implements MusicService {
   public QueryResult search(QueryRequest query) throws Exception {
     return musicDao.queryMusic(query);
   }
-  
-  
-    
+
+  public Map<String, String> getPathByName(String name, String region) {
+    AssetConfig config = assetConfigRepository.findByName(name);
+    String alistUrlPrefix = appConfig.getIpPort() + "/d" + env
+        .getProperty("alist.region." + region);
+    Map<String, String> map = new HashMap<>();
+    map.put("url", alistUrlPrefix + config.getPath());
+    return map;
+  }
+
+
 }

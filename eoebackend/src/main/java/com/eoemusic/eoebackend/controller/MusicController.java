@@ -1,11 +1,9 @@
 package com.eoemusic.eoebackend.controller;
 
 import com.eoemusic.eoebackend.config.HitCounter;
-import com.eoemusic.eoebackend.dao.MusicDao;
 import com.eoemusic.eoebackend.domain.PlaylistResponse;
 import com.eoemusic.eoebackend.domain.QueryRequest;
 import com.eoemusic.eoebackend.domain.QueryResult;
-import com.eoemusic.eoebackend.repository.MusicRepository;
 import com.eoemusic.eoebackend.service.MusicService;
 import com.eoemusic.eoebackend.utils.JSON;
 import java.util.List;
@@ -54,15 +52,16 @@ public class MusicController {
     return musicService.search(query);
   }
 
-  @Autowired
-  public MusicRepository musicRepository;
-
-  @Autowired
-  public MusicDao musicDao;
 
   @GetMapping("/hit/{musicId}")
   public void hit(@PathVariable("musicId") String musicId) {
     HitCounter.addHit(musicId);
+  }
+
+  @GetMapping("/asset/{name}")
+  public Map<String, String> getPathByName(@PathVariable("name") String name,
+      @RequestHeader(value = "region") String region) {
+    return musicService.getPathByName(name, region);
   }
 
 }
