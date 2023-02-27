@@ -24,5 +24,7 @@ public class AppConfig {
   @Value("${alist.ipPort}")
   private String ipPort;
 
+  private String coverMediaType = "png";
+
 
 }

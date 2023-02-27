@@ -1,5 +1,6 @@
 package com.eoemusic.eoebackend.controller;
 
+import com.eoemusic.eoebackend.config.AppConfig;
 import com.eoemusic.eoebackend.config.Constants;
 import com.eoemusic.eoebackend.entity.Music;
 import com.eoemusic.eoebackend.enums.SyncCSVEnum;
@@ -37,6 +38,9 @@ public class OpsController {
   @Autowired
   private MusicRepository musicRepository;
   
+  @Autowired
+  private AppConfig appConfig;
+  
   @PostMapping("/syncDatabase")
   public ResponseEntity<String> syncDatabase(@RequestParam("file") MultipartFile file,
       @RequestParam("alistAudioPath") String alistAudioPath,
@@ -64,7 +68,6 @@ public class OpsController {
               .append(csvDatum.get(SyncCSVEnum.SONG_NAME.getColumnNum()))
               .append(versionRemark).append(".").append(csvDatum
               .get(SyncCSVEnum.AUDIO_MEDIA_TYPE.getColumnNum())).toString());
-      String coverMediaType = "png";
       String musicID = csvDatum.get(SyncCSVEnum.ID.getColumnNum()).replaceAll("[^A-Za-z0-9]", "");
       Music musicDB = allMusicDB.stream().filter(m -> m.getId().equals(musicID)).findFirst()
           .orElse(null);
@@ -77,7 +80,7 @@ public class OpsController {
       music.setSongDate(csvDatum.get(SyncCSVEnum.SONG_DATE.getColumnNum()));
       music.setVersionRemark(csvDatum.get(SyncCSVEnum.VERSION_REMARK.getColumnNum()));
       music.setAudioMediaType(csvDatum.get(SyncCSVEnum.AUDIO_MEDIA_TYPE.getColumnNum()));
-      music.setCoverMediaType(coverMediaType);
+      music.setCoverMediaType(appConfig.getCoverMediaType());
       music.setDuration(Integer.valueOf(csvDatum.get(SyncCSVEnum.DURATION.getColumnNum())));
       music.setSongLanguage(csvDatum.get(SyncCSVEnum.SONG_LANGUAGE.getColumnNum()));
       music.setSongStatus(csvDatum.get(SyncCSVEnum.SONG_STATUS.getColumnNum()));
