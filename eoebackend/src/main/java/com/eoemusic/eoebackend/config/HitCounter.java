@@ -42,6 +42,5 @@ public class HitCounter {
   public void start() {
     ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     executor.scheduleAtFixedRate(() -> syncHitcount(), 30, 30, TimeUnit.MINUTES);
-
   }
 }
