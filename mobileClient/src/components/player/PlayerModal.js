@@ -6,7 +6,8 @@ import {
   ImageBackground,
   Pressable,
   Platform,
-  Image
+  Image,
+  StatusBar
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView, initialWindowMetrics } from 'react-native-safe-area-context'
@@ -191,6 +192,7 @@ const PlayerModal = (props) => {
 
   return (
     <Modal animationType="slide" visible={showPlayerModal}>
+      <StatusBar barStyle={'default'} translucent={true} />
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={[
@@ -295,7 +297,10 @@ const PlayerModal = (props) => {
             </View>
             <View style={styles.controllerWrapper}>
               {trackRepeatMode === TrackRepeatMode.Shuffle && (
-                <Pressable onPress={onPressShuffle}>
+                <Pressable
+                  onPress={onPressShuffle}
+                  style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+                >
                   <Icon
                     type="player"
                     name="shuffle"
@@ -306,7 +311,10 @@ const PlayerModal = (props) => {
                 </Pressable>
               )}
               {trackRepeatMode === TrackRepeatMode.Queue && (
-                <Pressable onPress={onPressRepeatQueue}>
+                <Pressable
+                  onPress={onPressRepeatQueue}
+                  style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+                >
                   <Icon
                     type="player"
                     name="repeat"
@@ -317,7 +325,10 @@ const PlayerModal = (props) => {
                 </Pressable>
               )}
               {trackRepeatMode === TrackRepeatMode.Track && (
-                <Pressable onPress={onPressRepeatTrack}>
+                <Pressable
+                  onPress={onPressRepeatTrack}
+                  style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}
+                >
                   <Icon
                     type="player"
                     name="repeat-once"

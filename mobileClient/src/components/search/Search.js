@@ -13,7 +13,8 @@ import { setSearchHistory, selectSearchHistory } from '../../store/slices/search
 import HistoryItem from './HistoryItem'
 import DeleteOverlay from './DeleteOverlay'
 import Footer from '../common/Footer'
-import { SearchOrder } from '../../constants/Other'
+import { SEARCH_ORDER } from '../../constants/Shared'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const NUM_HISTORYITEM = 10
 
@@ -30,6 +31,7 @@ const Search = () => {
   const dispatch = useDispatch()
   const searchHistory = useSelector(selectSearchHistory)
   const [showDeleteOverlay, setShowDeleteOverlay] = useState(false)
+  const insets = useSafeAreaInsets()
 
   const isItemPlaying = (track) => {
     if (currentTrack) return currentTrack.id === track.id
@@ -46,7 +48,7 @@ const Search = () => {
       const res = await MusicService.searchMusic(
         value,
         { page: 0, size: PAGE_SIZE },
-        SearchOrder.Hitcount
+        SEARCH_ORDER.Hitcount
       )
 
       const valueIdx = searchHistory.findIndex((element) => element === value)
@@ -87,7 +89,7 @@ const Search = () => {
           page: page + 1,
           size: PAGE_SIZE
         },
-        SearchOrder.Hitcount
+        SEARCH_ORDER.Hitcount
       )
       const convertedMusic = searchMusicResultConvert(res.items)
       setPage(res.pageable.page)
@@ -110,7 +112,7 @@ const Search = () => {
       const res = await MusicService.searchMusic(
         value,
         { page: 0, size: PAGE_SIZE },
-        SearchOrder.Hitcount
+        SEARCH_ORDER.Hitcount
       )
 
       const valueIdx = searchHistory.findIndex((element) => element === value)
@@ -166,7 +168,7 @@ const Search = () => {
   )
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.headerWrapper}>
         <Text style={styles.title}>搜索</Text>
         <View style={styles.searchBarWrapper}>

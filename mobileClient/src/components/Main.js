@@ -15,7 +15,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from './home/Home'
 import Search from './search/Search'
 import Library from './library/Library'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import LinearGradient from 'react-native-linear-gradient'
 import { Icon } from '@rneui/themed'
 import { TrackRepeatMode } from '../constants/Player'
@@ -40,6 +39,10 @@ const HomeStack = () => (
       component={Collection}
       options={{
         headerShown: false
+        // headerBackTitleVisible: false,
+        // headerBackTitle: '',
+        // headerTransparent: true,
+        // headerTitle: ''
       }}
     />
   </Stack.Navigator>
@@ -48,7 +51,6 @@ const HomeStack = () => (
 const Main = () => {
   const finishedSetup = useSelector(selectFinishedSetup)
   const dispatch = useDispatch()
-
   const playerBottomPosition = useSelector(selectBottomPosition)
 
   useEffect(() => {
@@ -84,7 +86,7 @@ const Main = () => {
   }, [])
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <View style={styles.container}>
       {!finishedSetup && <StartScreen />}
       {finishedSetup && (
         <>
@@ -134,7 +136,7 @@ const Main = () => {
           </View>
         </>
       )}
-    </SafeAreaView>
+    </View>
   )
 }
 
