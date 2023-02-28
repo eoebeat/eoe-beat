@@ -4,6 +4,7 @@ export const Colors = {
   white1: '#F7F7F7',
   white1Transparent: 'rgba(247, 247, 247, 0.9)',
   black1: '#030303',
+  black1Transparent: 'rgba(3,3,3,0.5)',
   pink1: '#d36baa',
   grey1: '#afb0b3',
   grey2: '#7b7b7b',

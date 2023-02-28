@@ -11,8 +11,11 @@ import MusicItem from '../common/MusicItem'
 import Separator from '../common/Separator'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button } from '@rneui/themed'
+import { COLLECTION_TYPE, HOME_PAGE_SIZE, SEARCH_ORDER } from '../../constants/Shared'
+import Footer from '../common/Footer'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const tabBarHeight = useBottomTabBarHeight()
   const dispatch = useDispatch()
   const [greeting, setGreeting] = useState('')
@@ -20,8 +23,8 @@ const Home = () => {
   const [page, setPage] = useState(0)
   const [totalNumMusic, setTotalNumMusic] = useState(0)
   const [musicListLoading, setMusicListLoading] = useState(false)
-  const PAGE_SIZE = 20
   const currentTrack = useSelector(selectCurrentTrack)
+  const insets = useSafeAreaInsets()
 
   // 选择在主页面监听正在播放的歌曲，并对每个MusicItem执行函数得到它是否在播放
   // Instead of 在每个MusicItem内做监听
@@ -47,7 +50,10 @@ const Home = () => {
   const getFirstPageMusic = async () => {
     try {
       setMusicListLoading(true)
-      const res = await MusicService.searchAllMusic({ page: 0, size: PAGE_SIZE })
+      const res = await MusicService.searchAllMusic(
+        { page: 0, size: HOME_PAGE_SIZE },
+        SEARCH_ORDER.DateNewToOld
+      )
       const convertedMusic = searchMusicResultConvert(res.items)
       setPage(res.pageable.page)
       setTotalNumMusic(res.pageable.total)
@@ -63,9 +69,12 @@ const Home = () => {
   // fetch下一页的music并更新state
   const getNextPageMusic = async () => {
     try {
-      if ((page + 1) * PAGE_SIZE >= totalNumMusic) return
+      if ((page + 1) * HOME_PAGE_SIZE >= totalNumMusic) return
       setMusicListLoading(true)
-      const res = await MusicService.searchAllMusic({ page: page + 1, size: PAGE_SIZE })
+      const res = await MusicService.searchAllMusic(
+        { page: page + 1, size: HOME_PAGE_SIZE },
+        SEARCH_ORDER.DateNewToOld
+      )
       const convertedMusic = searchMusicResultConvert(res.items)
       setPage(res.pageable.page)
       setTotalNumMusic(res.pageable.total)
@@ -85,13 +94,19 @@ const Home = () => {
   }
 
   const listHeaderComponent = (
-    <View style={styles.listHeaderContainer}>
+    <View style={[styles.listHeaderContainer, { paddingTop: insets.top }]}>
       <Text style={styles.greetingText}>{greeting}</Text>
       <Button onPress={clear} title="clear async storage" />
       <View style={styles.playlistCardsWrapper}>
         <View style={styles.playlistCardsSubWrapper}>
           <PlaylistCard title={'已收藏的歌曲'} />
-          <PlaylistCard title={'莞儿合集'} cardImage={require('../../../assets/cover/莞儿.jpg')} />
+          <PlaylistCard
+            title={'莞儿合集'}
+            cardImage={require('../../../assets/cover/莞儿.jpg')}
+            onPress={() =>
+              navigation.navigate('Collection', { type: COLLECTION_TYPE.Singer, label: '莞儿' })
+            }
+          />
         </View>
         <View style={[styles.playlistCardsSubWrapper, { marginTop: 6 }]}>
           <PlaylistCard title={'露早合集'} cardImage={require('../../../assets/cover/露早.jpg')} />
@@ -106,17 +121,15 @@ const Home = () => {
     </View>
   )
 
+  const renderItem = ({ item }) => <MusicItem track={item} itemPlaying={isItemPlaying(item)} />
+
   return (
     <FlatList
       data={musicList}
-      renderItem={({ item, index }) => <MusicItem track={item} itemPlaying={isItemPlaying(item)} />}
+      renderItem={renderItem}
       ListHeaderComponent={listHeaderComponent}
       ItemSeparatorComponent={Separator}
-      ListFooterComponent={
-        <View
-          style={{ height: 58 * HEIGHT_RATIO + tabBarHeight, backgroundColor: Colors.white1 }}
-        ></View>
-      }
+      ListFooterComponent={<Footer />}
       onEndReached={getNextPageMusic}
       refreshing={musicListLoading}
       initialNumToRender={7}

@@ -3,9 +3,9 @@ import React from 'react'
 import { Colors, WIDTH_RATIO } from '../../styles/Styles'
 
 const PlaylistCard = (props) => {
-  const { title, cardImage } = props
+  const { title, cardImage, onPress } = props
   return (
-    <Pressable style={styles.pressable}>
+    <Pressable style={styles.pressable} onPress={onPress}>
       <Image source={cardImage} style={styles.cardImage} />
       <Text style={styles.cardText}>{title}</Text>
     </Pressable>

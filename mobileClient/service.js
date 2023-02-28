@@ -25,11 +25,6 @@ module.exports = async function () {
       await TrackPlayer.play()
     })
 
-    // 测试用
-    // TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, (param) => {
-    //   console.log(param)
-    // })
-
     /**
      * @param {track<number>, position, nextTrack<number>}
      */
