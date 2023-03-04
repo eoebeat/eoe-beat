@@ -5,7 +5,8 @@ import {
   StatusBar,
   FlatList,
   Pressable,
-  ImageBackground
+  ImageBackground,
+  Platform
 } from 'react-native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { COLLECTION_TYPE, COLLECTION_PAGE_SIZE, SEARCH_ORDER } from '../../constants/Shared'
@@ -24,7 +25,7 @@ import { Icon } from '@rneui/themed'
 import LinearGradient from 'react-native-linear-gradient'
 import * as Animatable from 'react-native-animatable'
 
-const MIN_HEIGHT = Platform.OS === 'ios' ? 100 : 75
+const MIN_HEIGHT = Platform.OS === 'ios' ? 100 : 65
 const MAX_HEIGHT = 330
 
 const Collection = ({ route, navigation }) => {
@@ -38,6 +39,7 @@ const Collection = ({ route, navigation }) => {
   const currentTrack = useSelector(selectCurrentTrack)
   const insets = useSafeAreaInsets()
   const navTitleView = useRef(null)
+  const backBtnView = useRef(null)
   const [searchOrder, setSearchOrder] = useState(SEARCH_ORDER.DateNewToOld)
 
   useEffect(() => {
@@ -64,7 +66,6 @@ const Collection = ({ route, navigation }) => {
           searchOrder
         )
       }
-      console.log(res.items)
       const convertedMusic = searchMusicResultConvert(res.items)
       setPage(res.pageable.page)
       setTotalNumMusic(res.pageable.total)
@@ -170,9 +171,11 @@ const Collection = ({ route, navigation }) => {
             <TriggeringView
               onHide={() => {
                 navTitleView.current.fadeInUp(200)
+                backBtnView.current.fadeOut(200)
               }}
               onDisplay={() => {
                 navTitleView.current.fadeOut(400)
+                backBtnView.current.fadeIn(400)
               }}
             >
               <Text style={styles.foregroundTitle}>{label}</Text>
@@ -184,6 +187,20 @@ const Collection = ({ route, navigation }) => {
             ref={navTitleView}
             style={[styles.navTitleView, { top: initialWindowMetrics.insets.top + 4 }]}
           >
+            <Pressable
+              style={[
+                {
+                  position: 'absolute',
+                  left: 20 * WIDTH_RATIO
+                },
+                Platform.OS === 'android' && { top: 1 }
+              ]}
+              onPress={() => {
+                navigation.goBack()
+              }}
+            >
+              <Icon type="feather" name="chevron-left" color={Colors.white1} size={26} />
+            </Pressable>
             <Text style={styles.navTitle}>{label}</Text>
           </Animatable.View>
         )}
@@ -195,10 +212,11 @@ const Collection = ({ route, navigation }) => {
         ListHeaderComponent={listHeader}
         onEndReached={getNextPageMusic}
       ></ImageHeaderScrollView>
-      <View
+      <Animatable.View
+        ref={backBtnView}
         style={[
           styles.foregroundReturnWrapper,
-          { top: initialWindowMetrics.insets.top + 2, left: 20 }
+          { top: initialWindowMetrics.insets.top + 4, left: 20 * WIDTH_RATIO }
         ]}
       >
         <Pressable
@@ -206,9 +224,9 @@ const Collection = ({ route, navigation }) => {
             navigation.goBack()
           }}
         >
-          <Icon type="octicon" name="chevron-left" color={Colors.white1} size={26} />
+          <Icon type="feather" name="chevron-left" color={Colors.white1} size={26} />
         </Pressable>
-      </View>
+      </Animatable.View>
     </View>
   )
 }
@@ -230,7 +248,8 @@ const styles = StyleSheet.create({
   },
   foregroundReturnWrapper: {
     flexDirection: 'row',
-    position: 'absolute'
+    position: 'absolute',
+    alignItems: 'center'
   },
   foregroundTitle: {
     fontSize: 50,
@@ -238,6 +257,8 @@ const styles = StyleSheet.create({
     fontWeight: '700'
   },
   navTitleView: {
+    display: 'flex',
+    flexDirection: 'row',
     position: 'absolute',
     width: DEVICE_LOGIC_WIDTH,
     justifyContent: 'center',

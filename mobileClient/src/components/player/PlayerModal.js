@@ -191,8 +191,8 @@ const PlayerModal = (props) => {
   }
 
   return (
-    <Modal animationType="slide" visible={showPlayerModal}>
-      <StatusBar barStyle={'default'} translucent={true} />
+    <Modal animationType="slide" visible={showPlayerModal} statusBarTranslucent>
+      <StatusBar barStyle={'dark-content'} translucent={true} />
       <SafeAreaView style={styles.container}>
         <ImageBackground
           style={[
@@ -203,16 +203,43 @@ const PlayerModal = (props) => {
           blurRadius={20}
           source={coverImageSource}
         >
-          <BlurView
-            // style={[styles.blurView, Platform.OS === 'android' && styles.androidBlur]}
-            style={styles.blurView}
-            blurType="xlight"
-            blurAmount={50}
-            reducedTransparencyFallbackColor={Colors.white1}
-            overlayColor=""
-            blurRadius={25}
-            downsampleFactor={25}
-          />
+          {Platform.OS === 'ios' && (
+            <BlurView
+              // style={[styles.blurView, Platform.OS === 'android' && styles.androidBlur]}
+              style={styles.blurView}
+              blurType="xlight"
+              blurAmount={50}
+              reducedTransparencyFallbackColor={Colors.white1}
+              overlayColor={Colors.white1}
+              blurRadius={25}
+              downsampleFactor={25}
+            />
+          )}
+          {Platform.OS === 'android' && (
+            <BlurView
+              style={[styles.blurView, styles.androidBlur]}
+              blurType="xlight"
+              blurAmount={50}
+              overlayColor={Colors.white1}
+              blurRadius={25}
+              downsampleFactor={25}
+            >
+              <Image
+                source={coverImageSource}
+                style={[
+                  styles.backgroundImage,
+                  styles.blur,
+                  {
+                    position: 'absolute',
+                    width: '100%',
+                    backgroundColor: 'transparent',
+                    opacity: 0.4
+                  }
+                ]}
+                blurRadius={60}
+              />
+            </BlurView>
+          )}
           <View
             style={[
               styles.returnPressableWrapper,
